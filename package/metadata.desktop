@@ -1,0 +1,20 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Hellomoid
+Comment=Hello World example plasmoid
+Icon=face-cool
+Type=Service
+
+X-KDE-ParentApp=
+X-KDE-PluginInfo-Author=Your Name
+X-KDE-PluginInfo-Email=youraddress@email.com
+X-KDE-PluginInfo-License=GPL
+X-KDE-PluginInfo-Name=org.kde.hellomoid
+X-KDE-PluginInfo-Version=1.0
+X-KDE-PluginInfo-Website=plasma.kde.org
+X-KDE-ServiceTypes=Plasma/Applet
+X-KDE-PluginInfo-Category=Windows and Tasks
+
+X-Plasma-API=declarativeappletscript
+X-Plasma-MainScript=ui/main.qml
+X-Plasma-RemoteLocation=
