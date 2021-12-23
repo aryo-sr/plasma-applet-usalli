@@ -1,0 +1,22 @@
+{
+    "KPlugin": {
+        "Authors": [
+            {
+                "Email": "slamet.badwi@gmail.com",
+                "Name": "Slamet Badwi"
+            }
+        ],
+        "Category": "Date and Time",
+        "Description": "A prayer time reminder widget",
+        "Icon": "kalarm",
+        "Id": "com.github.baddwin.usalli",
+        "Name": "Usalli",
+        "ServiceTypes": [
+            "Plasma/Applet"
+        ],
+        "Version": "0.0.1",
+        "Website": "https://github.com/baddwin/usalli"
+    },
+    "X-Plasma-API": "declarativeappletscript",
+    "X-Plasma-MainScript": "ui/main.qml"
+}
