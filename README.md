@@ -51,7 +51,7 @@ If you prefer CLI, run these commands
 
 ```
 # for instance the extracted folder is in /home/user/Downloads
-cd ~/Downloads/plasma-applet-usalli-master
+cd ~/Downloads/plasma-applet-usalli-main
 mv package id.aryos.usalli
 cp -r id.aryos.usalli ~/.local/share/plasma/plasmoids/
 ```
@@ -62,7 +62,7 @@ With CLI
 
 ```
 # folder package has been previously renamed
-cp id.aryos.usalli/contents/icons/*.svg ~/.local/icons/
+cp id.aryos.usalli/contents/icons/*.svg ~/.local/share/icons/
 ```
 
 Then you can add the widget to KDE Plasma.
@@ -98,3 +98,4 @@ Then you can add the widget to KDE Plasma.
 ## License
 
 Please refer to LICENSE file.
+External materials or library licenses are also included.
