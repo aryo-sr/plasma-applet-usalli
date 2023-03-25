@@ -18,7 +18,7 @@ sudo dnf install kf5-kconfig kf5-knotifications kf5-ki18n
 
 ## Installing
 
-Build manually with CMake. Change `<your_username>` with your Linux user name.
+Build manually with CMake.
 
 ### Build Requirements
 
@@ -34,7 +34,7 @@ sudo apt install cmake extra-cmake-modules gettext g++ qml-module-org-kde-kconfi
 sudo dnf install cmake extra-cmake-modules plasma-workspace-devel kf5-kconfig-devel kf5-knotifications-devel kf5-plasma-devel kf5-ki18n-devel
 ```
 
-Then from project directory.
+Then run following commands from project directory. Change `<your_username>` with your Linux user name.
 
 ```
 mkdir build && cd build
@@ -46,6 +46,24 @@ make install
 
 Download this repo as ZIP, then extract it.
 Then copy folder `package` to `/home/<your_username>/.local/share/plasma/plasmoids` and rename it to `id.aryos.usalli`.
+
+If you prefer CLI, run these commands
+
+```
+# for instance the extracted folder is in /home/user/Downloads
+cd ~/Downloads/plasma-applet-usalli-master
+mv package id.aryos.usalli
+cp -r id.aryos.usalli ~/.local/share/plasma/plasmoids/
+```
+
+Also copy the SVG icon inside the folder `package/contens/icons` to `/home/<your_username>/.local/icons`.
+
+With CLI
+
+```
+# folder package has been previously renamed
+cp id.aryos.usalli/contents/icons/*.svg ~/.local/icons/
+```
 
 Then you can add the widget to KDE Plasma.
 
@@ -75,6 +93,7 @@ Then you can add the widget to KDE Plasma.
 - [ ] Show next / previous day button
 - [ ] Imsakiyah schedule
 - [ ] Linux packaging
+- [ ] Internationalization
 
 ## License
 

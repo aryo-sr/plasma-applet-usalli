@@ -8,7 +8,7 @@
         ],
         "Category": "Date and Time",
         "Description": "A prayer time reminder widget",
-        "Icon": "../plasma/plasmoids/id.aryos.usalli/contents/icons/kaaba-svgrepo-com.svg",
+        "Icon": "kaaba-svgrepo-com.svg",
         "Id": "id.aryos.usalli",
         "Name": "Usalli",
         "ServiceTypes": [

@@ -21,3 +21,5 @@ find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS
 
 # Add installation target ("make install")
 plasma_install_package(package id.aryos.usalli)
+# Copy applet icon
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/package/contents/icons/kaaba-svgrepo-com.svg DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons)
