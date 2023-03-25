@@ -2,20 +2,21 @@
     "KPlugin": {
         "Authors": [
             {
-                "Email": "slamet.badwi@gmail.com",
-                "Name": "Slamet Badwi"
+                "Email": "null@aryos.id",
+                "Name": "Aryo Sr."
             }
         ],
         "Category": "Date and Time",
         "Description": "A prayer time reminder widget",
-        "Icon": "kalarm",
-        "Id": "com.github.baddwin.usalli",
+        "Icon": "../plasma/plasmoids/id.aryos.usalli/contents/icons/kaaba-svgrepo-com.svg",
+        "Id": "id.aryos.usalli",
         "Name": "Usalli",
         "ServiceTypes": [
             "Plasma/Applet"
         ],
-        "Version": "0.0.1",
-        "Website": "https://github.com/baddwin/usalli"
+        "Version": "0.1.0",
+        "License": "GPL",
+        "Website": "https://github.com/aryo-sr/plasma-applet-usalli"
     },
     "X-Plasma-API": "declarativeappletscript",
     "X-Plasma-MainScript": "ui/main.qml"

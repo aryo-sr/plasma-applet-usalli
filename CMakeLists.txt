@@ -1,7 +1,9 @@
 # set minimum CMake version (req'd for CMake 3.0 or later)
-cmake_minimum_required(VERSION 2.8.12)
+cmake_minimum_required(VERSION 3.16)
 
 project(usalli)
+
+set(KF5_MIN_VERSION "5.92.0")
 
 # use Extra CMake Modules (ECM) for common functionality
 find_package(ECM REQUIRED NO_MODULE)
@@ -10,6 +12,12 @@ set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR} ${CMAKE_MODULE_PA
 
 # Locate plasma_install_package macro
 find_package(KF5Plasma REQUIRED)
+# Locate plasma_install_package macro.
+find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS
+    Plasma
+    I18n
+    Notifications
+)
 
 # Add installation target ("make install")
-plasma_install_package(plasmoid com.github.baddwin.usalli)
+plasma_install_package(package id.aryos.usalli)

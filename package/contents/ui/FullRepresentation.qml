@@ -1,24 +1,121 @@
-import QtQuick 2.0
-import QtQuick.Layouts 1.0
+import QtQuick 2.4
+import QtQuick.Layouts 1.1
+import QtQml 2.15
+
 import org.kde.plasma.plasmoid 2.0
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
-//import org.kde.plasma.components 3.0 as PlasmaComponents3
-import "../lib/PrayTimes.js" as PrayTimes
+import org.kde.plasma.components 3.0 as PlasmaComponents3
+import org.kde.plasma.extras 2.0 as PlasmaExtras
+//import org.kde.plasma.workspace.calendar 2.0 as PlasmaCalendar
+import org.kde.notification 1.0
+import "../lib/adhan.esm.js" as PrayTimes
 
 ColumnLayout {
-    id: kolomutama
+    id: fullView
+
+    readonly property date currentDateTime: dataSource.data.Local ? dataSource.data.Local.DateTime : new Date()
+    //property date currentDateTime: new Date('2023-03-23T11:49:00')
+
+    PlasmaCore.DataSource {
+        id: dataSource
+        engine: "time"
+        connectedSources: ["Local"]
+        interval: 60000
+        intervalAlignment: PlasmaCore.Types.AlignToMinute
+    }
+
+    Component.onCompleted: {
+        // console.log(nowPray)
+        // console.log(currentDateTime)
+        // console.log(endOfDay)
+        fullView.endOfDay = (nowPray == 'isha') ? true : false
+    }
+
+    function adjustImsakTime(time) {
+        var imsak = new Date(time.getTime())
+        imsak.setMinutes(time.getMinutes() - 10)
+        // console.log(imsak)
+        return imsak
+    }
+
+    // function debugTimeChange(time, addition) {
+    //     var newtime = new Date(time.getTime())
+    //     newtime.setMinutes(time.getMinutes() + addition)
+    //     return newtime
+    // }
+
+    function getRemainingTime(milliseconds) {
+        console.log('mili :' + milliseconds)
+        if (isNaN(milliseconds)) {
+            return {h: 0, m: 0}
+        }
+        var secRem = Math.floor(milliseconds / 1000)
+        var houRem = Math.floor(secRem / 3600 )
+        var secRem2 = secRem % 3600
+        var minRem = Math.floor(secRem2 / 60)
+
+        return {h: houRem, m: minRem}
+    }
+
+    function getRemainingTimeLabel(diff) {
+        var label = '-'
+        var remaining = getRemainingTime(diff)
+        if (diff > 0) {
+            if ( remaining.h > 0) {
+                label += remaining.h + ' jam ' + remaining.m + ' mnt'
+            } else {
+                label += remaining.m + ' mnt'
+            }
+        } else if ( remaining.h == -1 && remaining.m > -60) {
+            label = '+' + Math.abs(remaining.m) + ' mnt'
+        }
+        return label
+    }
+
+    function getNextPrayTime(name) {
+        if (name == 'none') {
+            name = 'fajr'
+            // if (plasmoid.configuration.showImsak) {
+            //     name = 'imsak'
+            // }
+        }
+        // var sunnahTimes = new PrayTimes.SunnahTimes(times)
+        // console.log('midnight ' + sunnahTimes.middleOfTheNight)
+        // console.log('last third night ' + sunnahTimes.lastThirdOfTheNight)
+        return times.timeForPrayer(name)
+    }
+
+    function setPrayTimesDate(nextDay = true) {
+        if (nextDay) {
+            fullView.prayTimesDate = new Date(new Date().setDate(currentDateTime.getDate() + 1))
+        } else {
+            fullView.prayTimesDate = fullView.currentDateTime
+            fullView.newDay = false
+        }
+    }
+
+    // Component.onDestruction: {
+    //     //console.log(alternateDate)
+    // }
+
+    SystemPalette {
+        id: myPalette
+        colorGroup: SystemPalette.Active
+    }
+    property color system_text_color: myPalette.text
 
     Component {
         id: listDelegate
 
         PlasmaComponents.ListItem {
-            //Layout.alignment: Qt.AlighCenter
+            id: itemListDelegate
             height: contentRow.implicitHeight + 2 * 5
-            //width: parent.width
             Layout.minimumWidth: parent.width
-    //         anchors.left: kolomutama.left
-    //         anchors.right: kolomutama.right
+            property bool imsak: modelData == 'imsak'
+            property var timeC: imsak ? fullView.adjustImsakTime(times['fajr']) : times[modelData]
+            property bool next: nextPray == modelData
+            property bool current: nowPray == modelData
 
             RowLayout {
                 id: contentRow
@@ -26,16 +123,17 @@ ColumnLayout {
 
                 ColumnLayout {
                     id: infoNama
-                    Layout.fillWidth: true
+                    Layout.fillWidth: false
                     spacing: -1
-                    Layout.preferredWidth: 40
+                    Layout.preferredWidth: parent.width / 3
 
                     PlasmaComponents.Label {
                         Layout.fillWidth: true
                         Layout.alignment: Qt.AlignLeft
                         width: parent.width
 
-                        text: modelData.name
+                        text: timeNames[modelData]
+                        color: fullView.currentDateTime < timeC ? (next ? '#FF372A' : system_text_color) : (current ? 'green' : 'pink')
                         font.weight: Font.Black
                     }
                 }
@@ -47,26 +145,26 @@ ColumnLayout {
 
                     PlasmaComponents.Label {
                         Layout.fillWidth: true
-                        Layout.alignment: Qt.AlignHCenter
+                        Layout.alignment: Qt.AlignLeft
 
-                        text: modelData.time
-                        // Sometimes it has HTML encoded characters
-                        // StyledText will render them nicely (and more performant than RichText)
-                        textFormat: Text.StyledText
-                        elide: Text.ElideMiddle
+                        text: Qt.formatTime(timeC)
+                        color: fullView.currentDateTime < timeC ? (next ? '#FF372A' : system_text_color) : (current ? 'green' : 'pink')
+                        font.weight: (modelData == fullView.nowPray || modelData == fullView.nextPray) ? Font.Black : Font.Normal
                     }
                 }
 
                 ColumnLayout {
                     id: infoKanan
                     Layout.alignment: Qt.AlignRight
+                    Layout.fillWidth: true
                     spacing: -1
 
                     PlasmaComponents.Label {
                         Layout.alignment: Qt.AlignRight
+                        property var remaining: timeC - fullView.currentDateTime
 
-                        text: 'sisa waktu'
-                        color: 'orange'
+                        text: getRemainingTimeLabel(remaining)
+                        color: remaining > 0 ? (next ? '#FF372A' : system_text_color) : (current ? 'green' : 'pink')
                         clip: true
                         textFormat: Text.StyledText
                         elide: Text.ElideMiddle
@@ -76,93 +174,104 @@ ColumnLayout {
         }
     }
 
-    Layout.minimumWidth : plasmoid.formFactor == PlasmaCore.Types.Horizontal ? height : 1
-    Layout.minimumHeight : plasmoid.formFactor == PlasmaCore.Types.Vertical ? width  : 1
-    Layout.preferredWidth: 320 * PlasmaCore.Units.devicePixelRatio
-    Layout.preferredHeight: 360 * PlasmaCore.Units.devicePixelRatio
+    Component {
+        id: notificationComponent
+        Notification {
+            componentName: "plasma_workspace"
+            eventId: "notification"
+            text: "Selamat mendirikan sholat. Semoga kita dijadikan hamba Allah yang bertakwa."
+            iconName: 'kalarm'
+            autoDelete: true
+        }
+    }
 
-    property var waktuSholats: [
-        {
-            "nama": "Subuh",
-            "waktu": "04.20 WIB"
-        },
-        {
-            "nama": "Syuruq",
-            "waktu": "05.20 WIB"
-        },
-        {
-            "nama": "Zhuhur",
-            "waktu": "11.50 WIB"
-        },
-        {
-            "nama": "Ashar",
-            "waktu": "14.50 WIB"
-        },
-        {
-            "nama": "Magrib",
-            "waktu": "17.40 WIB"
-        },
-        {
-            "nama": "Isya",
-            "waktu": "19.00 WIB"
-        },
-    ]
+    Layout.minimumWidth: 320 * PlasmaCore.Units.devicePixelRatio
+    Layout.minimumHeight: 360 * PlasmaCore.Units.devicePixelRatio
 
-    //property var locale: Qt.locale()
-    property date now: new Date()
-    property var prayTime: new PrayTimes.PrayTimes('Egypt')
-    property var times: prayTime.getTimes([now.getFullYear(), now.getMonth() + 1, now.getDate()], [-6.2088, 106.8456], 7)
-    //Component.onCompleted: {
-        //prayTimes.setMethod('Egypt')
-        //prayTimes.adjust({fajr: 20, isha: 18})
-    //}
-    //property var times: prayTimes.getTimes(now, [-6.2088, 106.8456], 7)
-    //property var times: PrayerTimes.getTimes()
+    property bool endOfDay: false
+    property bool newDay: false
+    property date prayTimesDate: currentDateTime
 
-    property var timesModel: [
-        { name: "Subuh", time: times.fajr },
-        { name: "Zhuhur", time: times.dhuhr },
-        { name: "Ashar", time: times.asr },
-        { name: "Maghrib", time: times.maghrib },
-        { name: "Isya", time: times.isha }
-    ]
 
-    //Component {
-        //id: timesDelegate
+    readonly property var timeNames: {
+        'imsak': "Imsak",
+        'fajr': "Subuh",
+        'sunrise': "Terbit",
+        'dhuhr': "Zhuhur",
+        'asr': "Ashar",
+        'maghrib': "Maghrib",
+        'isha': "Isya'"
+    }
 
-        //PlasmaComponents.Label {
-            //text: modelData.name
+    readonly property var longitude: plasmoid.configuration.longitude
+    readonly property var latitude: plasmoid.configuration.latitude
+    readonly property var coordinates: new PrayTimes.Coordinates(longitude, latitude)
+    readonly property var params: new PrayTimes.CalculationMethod.Singapore()
+    property var times: new PrayTimes.PrayerTimes(coordinates, prayTimesDate, params)
+    property var nowPrayComp: ''
+    property var nowPray: times.currentPrayer(currentDateTime)
+    property var nextPray: times.nextPrayer(currentDateTime)
+    property var nextTime: getNextPrayTime(nextPray)
+    property var difTime: nextTime - currentDateTime
 
-            //Component.onCompleted: {
-                //console.log(modelData)
-            //}
-        //}
-    //}
+    property var nextSubText: getRemainingTimeLabel(difTime)
+    Plasmoid.toolTipMainText: (nextPray == 'none') ? 'Waktunya istirahat' : 'Menunggu waktu ' + timeNames[nextPray]
+    Plasmoid.toolTipSubText: nextSubText == '-' ? '' : nextSubText + ' lagi'
 
-    //Repeater {
-        //model: kolomutama.timesModel
-        //delegate: timesDelegate
-    //}
+    onNowPrayChanged: {
+        var notification = notificationComponent.createObject(parent);
+        notification.title = "Waktunya " + timeNames[nowPray];
+        if (nowPrayComp && nowPray != nowPrayComp && nowPray != 'sunrise' && nowPray != 'none')
+            notification.sendEvent();
+
+        nowPrayComp = nowPray
+    }
+
+    onCurrentDateTimeChanged: {
+        if (prayTimesDate.getDate() != currentDateTime.getDate()) {
+            // console.log('new day')
+            fullView.newDay = true
+            setPrayTimesDate(false)
+        }
+    }
+
+    readonly property var timeKeys: Object.keys(timeNames)
+    property var timesModel: plasmoid.configuration.showImsak ? timeKeys : timeKeys.slice(1)
 
     RowLayout {
-        id: labelatas
+        id: labelTop
         width: parent.width
         height: parent.height
         Layout.minimumHeight: 40
 
-        PlasmaComponents.Label {
-            id: labeltanggal
-//                 anchors.fill: parent
-            text: "Ahad, 14 Jumadil Awal 1443 H"
-            horizontalAlignment: Text.AlignHCenter
-//                 verticalAlignment: Text.AlignVCenter
-            Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
+        ColumnLayout {
+            id: plasmoidName
+            Layout.fillWidth: false
+            Layout.preferredWidth: parent.width / 2
+            PlasmaExtras.Heading {
+                text: "Jadwal Shalat"
+                level: 1 
+            }
+        }
+
+        ColumnLayout {
+            id: dateInfo
             Layout.fillWidth: true
+            spacing: -1
+            Layout.preferredWidth: parent.width / 2
+            property var titleDate: Qt.formatDate(prayTimesDate, "dd/MMM/yyyy")
+
+            PlasmaExtras.Heading {
+                text: (endOfDay) ? '(Besok) ' + dateInfo.titleDate : dateInfo.titleDate
+                level: 4 
+                horizontalAlignment: Text.AlignRight
+                Layout.alignment: Qt.AlignRight
+            }
         }
     }
 
     Repeater {
-        model: kolomutama.timesModel
+        model: fullView.timesModel
         delegate: listDelegate
     }
 
@@ -174,8 +283,7 @@ ColumnLayout {
 
         PlasmaComponents.Label {
             id: labelkota
-//                 anchors.fill: parent
-            text: "Batang -6.9 LS 110 BT"
+            text: 'Koordinat ' + plasmoid.configuration.longitude + ', ' + plasmoid.configuration.latitude
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignBottom
             Layout.alignment: Qt.AlignBottom | Qt.AlignHCenter
@@ -192,7 +300,6 @@ ColumnLayout {
 
         PlasmaComponents.Label {
             id: labelinstansi
-//                 anchors.fill: parent
             text: "Perhitungan Waktu Kemenag Indonesia"
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
