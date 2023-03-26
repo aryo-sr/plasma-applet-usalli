@@ -6,6 +6,11 @@
         <entry name="showImsak" type="Bool">
             <default>true</default>
         </entry>
+        <entry name="showAsIcon" type="Bool">
+            <default>true</default>
+        </entry>
+    </group>
+    <group name="Location">
         <entry name="longitude" type="Double">
             <default>-6.9886733</default>
         </entry>

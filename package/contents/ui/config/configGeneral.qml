@@ -9,6 +9,27 @@ Kirigami.FormLayout {
     property alias cfg_longitude: longText.text
     property alias cfg_latitude: latText.text
 
+    property bool cfg_showAsIcon
+
+    function setPanelAppearance(asIcon) {
+        cfg_showAsIcon = asIcon
+    }
+
+
+    QQC2.RadioButton {
+        id: radioTempAsIcon
+        Kirigami.FormData.label: i18nc("@label", "Show on panel as:")
+        checked: cfg_showAsIcon
+        onToggled: setPanelAppearance(true)
+        text: i18nc("@option:radio Show on panel as:", "Icon")
+    }
+    QQC2.RadioButton {
+        id: radioTempAsLabel
+        checked: !cfg_showAsIcon
+        onToggled: setPanelAppearance(false)
+        text: i18nc("@option:radio Show on panel as:", "Label")
+    }
+
     QQC2.CheckBox {
         id: showImsak
         Kirigami.FormData.label: i18n("Imsak Time:")

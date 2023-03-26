@@ -14,7 +14,7 @@
         "ServiceTypes": [
             "Plasma/Applet"
         ],
-        "Version": "0.1.0",
+        "Version": "0.1.2",
         "License": "GPL",
         "Website": "https://github.com/aryo-sr/plasma-applet-usalli"
     },

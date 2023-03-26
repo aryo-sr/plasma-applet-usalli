@@ -82,10 +82,11 @@ Then you can add the widget to KDE Plasma.
 - [x] Config show imsak
 - [x] Notification popup
 - [x] Custom icon
+- [x] Config show next prayer label rather than icon in task bar
+- [x] Containment view on desktop
 - [ ] Add dhuha time: 15+ sunrise & 15- dhuhr
 - [ ] Tooltip hijri calendar
 - [ ] Show hijri calendar
-- [ ] Config show next prayer label rather than icon in task bar
 - [ ] Config others: madhab, calculation method
 - [ ] Config adjust hijri day
 - [ ] Get kde geolocation data / gmaps api get lang lot search city
@@ -94,6 +95,8 @@ Then you can add the widget to KDE Plasma.
 - [ ] Imsakiyah schedule
 - [ ] Linux packaging
 - [ ] Internationalization
+- [ ] Countdown on last minute
+- [ ] Checkbox at each time, can log the progress and collect the analytics
 
 ## License
 
