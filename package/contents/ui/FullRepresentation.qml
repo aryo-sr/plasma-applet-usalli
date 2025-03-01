@@ -1,11 +1,11 @@
 import QtQuick 2.4
 import QtQuick.Layouts 1.1
 import QtQml 2.15
-import org.kde.plasma.plasmoid 2.0
-import org.kde.plasma.core 2.0 as PlasmaCore
-import org.kde.plasma.components 2.0 as PlasmaComponents
+import org.kde.plasma.plasmoid
+import org.kde.plasma.core as PlasmaCore
+// import org.kde.plasma.components 2.0 as PlasmaComponents
 import org.kde.plasma.components 3.0 as PlasmaComponents3
-import org.kde.plasma.extras 2.0 as PlasmaExtras
+import org.kde.plasma.extras as PlasmaExtras
 
 
 ColumnLayout {
@@ -24,7 +24,7 @@ ColumnLayout {
     Component {
         id: listDelegate
 
-        PlasmaComponents.ListItem {
+        PlasmaExtras.ListItem {
             id: itemListDelegate
             height: contentRow.implicitHeight + 2 * 5
             Layout.minimumWidth: parent.width
@@ -43,7 +43,7 @@ ColumnLayout {
                     spacing: -1
                     Layout.preferredWidth: parent.width / 3
 
-                    PlasmaComponents.Label {
+                    PlasmaComponents3.Label {
                         Layout.fillWidth: true
                         Layout.alignment: Qt.AlignLeft
                         width: parent.width
@@ -59,7 +59,7 @@ ColumnLayout {
                     Layout.fillWidth: true
                     spacing: -1
 
-                    PlasmaComponents.Label {
+                    PlasmaComponents3.Label {
                         Layout.fillWidth: true
                         Layout.alignment: Qt.AlignLeft
 
@@ -75,7 +75,7 @@ ColumnLayout {
                     Layout.fillWidth: true
                     spacing: -1
 
-                    PlasmaComponents.Label {
+                    PlasmaComponents3.Label {
                         Layout.alignment: Qt.AlignRight
                         property int remaining: timeC - root.currentDateTime
 
@@ -138,7 +138,7 @@ ColumnLayout {
         Layout.minimumHeight: 40
         Layout.alignment: Qt.AlignBottom
 
-        PlasmaComponents.Label {
+        PlasmaComponents3.Label {
             id: labelkota
             text: 'Koordinat ' + plasmoid.configuration.longitude + ', ' + plasmoid.configuration.latitude
             horizontalAlignment: Text.AlignHCenter
@@ -156,7 +156,7 @@ ColumnLayout {
         Layout.minimumHeight: 30
         Layout.alignment: Qt.AlignTop
 
-        PlasmaComponents.Label {
+        PlasmaComponents3.Label {
             id: labelinstansi
             text: "Perhitungan Waktu Kemenag Indonesia"
             horizontalAlignment: Text.AlignHCenter

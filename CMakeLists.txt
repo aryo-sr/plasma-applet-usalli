@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.16)
 
 project(usalli)
 
-set(KF5_MIN_VERSION "5.92.0")
+set(KF6_MIN_VERSION "5.240.0")
 
 # use Extra CMake Modules (ECM) for common functionality
 find_package(ECM REQUIRED NO_MODULE)
@@ -11,10 +11,10 @@ find_package(ECM REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR} ${CMAKE_MODULE_PATH})
 
 # Locate plasma_install_package macro
-find_package(KF5Plasma REQUIRED)
+find_package(Plasma 5.90.0 REQUIRED)
 # Locate plasma_install_package macro.
-find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS
-    Plasma
+find_package(KF6 ${KF5_MIN_VERSION} REQUIRED COMPONENTS
+    #Plasma
     I18n
     Notifications
 )

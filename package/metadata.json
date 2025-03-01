@@ -1,4 +1,5 @@
 {
+    "KPackageStructure": "Plasma/Applet",
     "KPlugin": {
         "Authors": [
             {
@@ -11,13 +12,9 @@
         "Icon": "kaaba-svgrepo-com.svg",
         "Id": "id.aryos.usalli",
         "Name": "Usalli",
-        "ServiceTypes": [
-            "Plasma/Applet"
-        ],
-        "Version": "0.1.2",
+        "Version": "0.2.0",
         "License": "GPL",
         "Website": "https://github.com/aryo-sr/plasma-applet-usalli"
     },
-    "X-Plasma-API": "declarativeappletscript",
-    "X-Plasma-MainScript": "ui/main.qml"
+    "X-Plasma-API-Minimum-Version": "6.0"
 }

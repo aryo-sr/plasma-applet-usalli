@@ -1,16 +1,18 @@
-import QtQuick 2.4
+import QtQuick 2.15
 import QtQuick.Layouts 1.1
 import QtQml 2.15
-import org.kde.plasma.plasmoid 2.0
-import org.kde.plasma.core 2.0 as PlasmaCore
-import org.kde.plasma.components 2.0 as PlasmaComponents
+import org.kde.kirigami as Kirigami
+import org.kde.plasma.plasmoid
+import org.kde.plasma.core as PlasmaCore
+//import org.kde.plasma.components 2.0 as PlasmaComponents
 import org.kde.plasma.components 3.0 as PlasmaComponents3
-import org.kde.plasma.extras 2.0 as PlasmaExtras
+import org.kde.plasma.plasma5support as Plasma5Support
+import org.kde.plasma.extras as PlasmaExtras
 // import org.kde.plasma.workspace.calendar 2.0 as PlasmaCalendar
-import org.kde.notification 1.0
+import org.kde.notification
 import "../lib/adhan.esm.js" as PrayTimes
 
-Item {
+PlasmoidItem {
     id: root
 
     readonly property date currentDateTime: dataSource.data.Local ? dataSource.data.Local.DateTime : new Date()
@@ -42,8 +44,9 @@ Item {
     property var nextTime: getNextPrayTime(nextPray)
     property var difTime: nextTime - currentDateTime
     property var nextSubText: getRemainingTimeLabel(difTime)
-    Plasmoid.toolTipMainText: endOfDay ? 'Waktu istirahat' : 'Menuju waktu ' + timeNames[nextPray]
-    Plasmoid.toolTipSubText: nextSubText == '-' ? '' : nextSubText + ' lagi'
+    // TODO contextualActions
+    //Plasmoid.toolTipMainText: endOfDay ? 'Waktu istirahat' : 'Menuju waktu ' + timeNames[nextPray]
+    //Plasmoid.toolTipSubText: nextSubText == '-' ? '' : nextSubText + ' lagi'
 
     readonly property var timeKeys: Object.keys(timeNames)
     property var timesModel: plasmoid.configuration.showImsak ? timeKeys : timeKeys.slice(1)
@@ -66,6 +69,7 @@ Item {
         // console.log(endOfDay)
         endOfDay = (nowPray == 'isha') ? true : false
         // setPrayTimesDate(endOfDay)
+        //nextSubText =
     }
 
     function adjustImsakTime(time) {
@@ -152,13 +156,13 @@ Item {
     }
 
     property bool isDesktopContainment: plasmoid.location == PlasmaCore.Types.Floating
-    Plasmoid.preferredRepresentation:  isDesktopContainment ? Plasmoid.fullRepresentation : Plasmoid.compactRepresentation
-    Plasmoid.compactRepresentation: CompactRepresentation {
+    preferredRepresentation:  isDesktopContainment ? fullRepresentation : compactRepresentation
+    compactRepresentation: CompactRepresentation {
         countdownLabel: endOfDay ? "Istirahat" : timeNames[nextPray] + " " + getRemainingTimeLabel(difTime, false)
     }
-    Plasmoid.fullRepresentation: FullRepresentation {}
+    fullRepresentation: FullRepresentation {}
 
-    PlasmaCore.DataSource {
+    Plasma5Support.DataSource {
         id: dataSource
         engine: "time"
         connectedSources: ["Local"]

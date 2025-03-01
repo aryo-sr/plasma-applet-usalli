@@ -1,10 +1,11 @@
 import QtQuick 2.4
 import QtQuick.Layouts 1.1
 import QtQml 2.15
-import org.kde.plasma.plasmoid 2.0
-import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.plasma.plasmoid
+import org.kde.plasma.core as PlasmaCore
 import org.kde.plasma.components 3.0 as PlasmaComponents3
-import org.kde.plasma.components 2.0 as PlasmaComponents
+//import org.kde.plasma.components 2.0 as PlasmaComponents
+import org.kde.kirigami as Kirigami
 
 Loader {
     id: simpleView
@@ -48,7 +49,7 @@ Loader {
     Component {
         id: iconView
 
-        PlasmaCore.IconItem {
+        Kirigami.Icon {
             id: iconSingle
             readonly property int minimumIconSize: PlasmaCore.Units.iconSizes.small
             readonly property int iconSize: width
