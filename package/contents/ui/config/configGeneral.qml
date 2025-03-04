@@ -39,12 +39,12 @@ Kirigami.FormLayout {
     QQC2.TextField {
         id: longText
         Kirigami.FormData.label: i18n("Longitude:")
-        placeholderText: i18n("Garis Lintang")
+        placeholderText: i18n("Garis Bujur")
     }
     
     QQC2.TextField {
         id: latText
         Kirigami.FormData.label: i18n("Latitude:")
-        placeholderText: i18n("Garis Bujur")
+        placeholderText: i18n("Garis Lintang")
     }
 }
