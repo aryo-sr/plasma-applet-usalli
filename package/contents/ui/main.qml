@@ -34,7 +34,7 @@ PlasmoidItem {
 
     readonly property var longitude: plasmoid.configuration.longitude
     readonly property var latitude: plasmoid.configuration.latitude
-    readonly property var coordinates: new PrayTimes.Coordinates(longitude, latitude)
+    readonly property var coordinates: new PrayTimes.Coordinates(latitude, longitude)
     readonly property var params: new PrayTimes.CalculationMethod.Singapore()
     property var times: new PrayTimes.PrayerTimes(coordinates, prayTimesDate, params)
     property var nowPrayComp: ''
